@@ -28,7 +28,13 @@ export type AuditAction =
   | 'rate_limit.exceeded'
   | 'feedback.create'
   | 'feedback.list'
-  | 'feedback.rate_limited';
+  | 'feedback.rate_limited'
+  | 'user.unsubscribe'
+  | 'user.unsubscribe.already'
+  | 'user.resubscribe'
+  | 'user.resubscribe.already'
+  | 'user.delete_data'
+  | 'user.check_subscription';
 
 /**
  * Log an audit event
