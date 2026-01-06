@@ -1,6 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 import { getDb } from '../db/client.js';
 import type { AuditLogEntry } from '../types/index.js';
+import logger from '../utils/logger.js';
 
 export type AuditAction =
   | 'auth.missing_key'
@@ -52,7 +53,7 @@ export function audit(
     );
   } catch (error) {
     // Log but don't throw - audit failures shouldn't break the request
-    console.error('Audit log error:', error);
+    logger.error('Audit log error', { action, error });
   }
 }
 

@@ -2,6 +2,7 @@ import { getDb } from '../db/client.js';
 import type { Task, CreateTaskInput, TaskStatus, PaginatedResponse } from '../types/index.js';
 import { sanitizeProjectName, sanitizeContent, truncate } from '../security/sanitize.js';
 import { syncTaskToVault, deleteTaskFromVault } from './vault-sync.js';
+import logger from '../utils/logger.js';
 
 interface TaskListQuery {
   project?: string;
@@ -69,7 +70,7 @@ export function createTask(input: CreateTaskInput): Task {
   try {
     syncTaskToVault(task);
   } catch (error) {
-    console.error('Failed to sync task to vault:', error);
+    logger.warn('Failed to sync task to vault', { taskId: id, error });
   }
 
   return task;
@@ -161,7 +162,7 @@ export function activateTask(id: string): Task | null {
     try {
       syncTaskToVault(updated);
     } catch (error) {
-      console.error('Failed to sync task to vault:', error);
+      logger.warn('Failed to sync task to vault', { taskId: id, error });
     }
   }
 
@@ -191,7 +192,7 @@ export function completeTask(id: string): Task | null {
     try {
       syncTaskToVault(updated);
     } catch (error) {
-      console.error('Failed to sync task to vault:', error);
+      logger.warn('Failed to sync task to vault', { taskId: id, error });
     }
   }
 
@@ -220,7 +221,7 @@ export function cancelTask(id: string): Task | null {
     try {
       syncTaskToVault(updated);
     } catch (error) {
-      console.error('Failed to sync task to vault:', error);
+      logger.warn('Failed to sync task to vault', { taskId: id, error });
     }
   }
 
@@ -246,7 +247,7 @@ export function deleteTask(id: string): boolean {
     try {
       deleteTaskFromVault(task);
     } catch (error) {
-      console.error('Failed to delete task from vault:', error);
+      logger.warn('Failed to delete task from vault', { taskId: id, error });
     }
   }
 

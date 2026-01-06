@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config.js';
+import logger from '../utils/logger.js';
 
 let db: Database.Database | null = null;
 
@@ -32,7 +33,7 @@ export function initDb(): Database.Database {
   // Run migrations
   runMigrations(db);
 
-  console.log(`Database initialized at ${config.databasePath}`);
+  logger.info('Database initialized', { path: config.databasePath });
   return db;
 }
 
@@ -40,7 +41,7 @@ export function closeDb(): void {
   if (db) {
     db.close();
     db = null;
-    console.log('Database connection closed');
+    logger.info('Database connection closed');
   }
 }
 
@@ -69,7 +70,7 @@ function runMigrations(database: Database.Database): void {
     : migrationsDir;
 
   if (!fs.existsSync(normalizedPath)) {
-    console.log('No migrations directory found, skipping file-based migrations');
+    logger.debug('No migrations directory found, skipping file-based migrations');
     // Run inline initial migration
     runInitialMigration(database, appliedSet);
     return;
@@ -81,7 +82,7 @@ function runMigrations(database: Database.Database): void {
 
   for (const file of files) {
     if (!appliedSet.has(file)) {
-      console.log(`Applying migration: ${file}`);
+      logger.info('Applying migration', { file });
       const sql = fs.readFileSync(path.join(normalizedPath, file), 'utf-8');
       database.exec(sql);
       database.prepare('INSERT INTO migrations (name) VALUES (?)').run(file);
@@ -99,7 +100,7 @@ function runInitialMigration(database: Database.Database, appliedSet: Set<string
     return;
   }
 
-  console.log('Applying inline initial migration...');
+  logger.info('Applying inline initial migration');
 
   database.exec(`
     -- API Keys
@@ -185,7 +186,7 @@ function runInitialMigration(database: Database.Database, appliedSet: Set<string
   `);
 
   database.prepare('INSERT INTO migrations (name) VALUES (?)').run(migrationName);
-  console.log('Initial migration applied successfully');
+  logger.info('Initial migration applied successfully');
 }
 
 // Export for testing

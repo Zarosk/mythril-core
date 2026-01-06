@@ -3,6 +3,7 @@ import { getDb } from '../db/client.js';
 import type { Artifact, CreateArtifactInput, UpdateArtifactInput, PaginatedResponse } from '../types/index.js';
 import { sanitizeContent, sanitizeProjectName, truncate } from '../security/sanitize.js';
 import { syncArtifactToVault, deleteArtifactFromVault } from './vault-sync.js';
+import logger from '../utils/logger.js';
 
 interface ArtifactListQuery {
   project?: string;
@@ -41,7 +42,7 @@ export function createArtifact(input: CreateArtifactInput): Artifact {
   try {
     syncArtifactToVault(artifact);
   } catch (error) {
-    console.error('Failed to sync artifact to vault:', error);
+    logger.warn('Failed to sync artifact to vault', { artifactId: id, error });
   }
 
   return artifact;
@@ -140,7 +141,7 @@ export function updateArtifact(id: string, updates: UpdateArtifactInput): Artifa
     try {
       syncArtifactToVault(updated);
     } catch (error) {
-      console.error('Failed to sync artifact to vault:', error);
+      logger.warn('Failed to sync artifact to vault', { artifactId: id, error });
     }
   }
 
@@ -166,7 +167,7 @@ export function deleteArtifact(id: string): boolean {
     try {
       deleteArtifactFromVault(artifact);
     } catch (error) {
-      console.error('Failed to delete artifact from vault:', error);
+      logger.warn('Failed to delete artifact from vault', { artifactId: id, error });
     }
   }
 

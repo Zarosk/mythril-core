@@ -5,22 +5,23 @@ import { config } from './config.js';
 import { initDb, closeDb } from './db/client.js';
 import { buildApp } from './app.js';
 import { generateApiKey } from './security/api-keys.js';
+import logger from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main(): Promise<void> {
-  console.log('Starting OADS Brain API Server...');
-  console.log(`Environment: ${config.nodeEnv}`);
+  logger.info('Starting OADS Brain API Server');
+  logger.info('Environment', { env: config.nodeEnv });
 
   // Initialize database
-  console.log('Initializing database...');
+  logger.info('Initializing database...');
   initDb();
 
   // Check if we need to generate an initial API key
   const adminKeyEnv = process.env['ADMIN_API_KEY'];
   if (!adminKeyEnv) {
-    console.log('\n⚠️  No ADMIN_API_KEY found. Generating initial admin key...');
+    logger.warn('No ADMIN_API_KEY found. Generating initial admin key...');
     const key = await generateApiKey('admin', 'full', 1000);
 
     // Save to .env file
@@ -29,20 +30,21 @@ async function main(): Promise<void> {
       const envContent = fs.readFileSync(envPath, 'utf-8');
       if (!envContent.includes('ADMIN_API_KEY=')) {
         fs.appendFileSync(envPath, `\nADMIN_API_KEY=${key.key}\n`);
-        console.log(`\n✅ API key saved to .env file`);
+        logger.info('API key saved to .env file');
       }
     } else {
       fs.writeFileSync(envPath, `ADMIN_API_KEY=${key.key}\n`);
-      console.log(`\n✅ API key saved to new .env file`);
+      logger.info('API key saved to new .env file');
     }
 
+    // Still log to console for initial setup visibility
     console.log('\n╔═══════════════════════════════════════════════════════════════════╗');
     console.log('║ ADMIN API KEY (saved to .env)                                     ║');
     console.log('╠═══════════════════════════════════════════════════════════════════╣');
     console.log(`║ ${key.key} ║`);
     console.log('╚═══════════════════════════════════════════════════════════════════╝\n');
   } else {
-    console.log('✅ Using existing ADMIN_API_KEY from environment');
+    logger.info('Using existing ADMIN_API_KEY from environment');
   }
 
   // Build and start server
@@ -54,12 +56,13 @@ async function main(): Promise<void> {
       host: config.host
     });
 
-    console.log(`\n🧠 OADS Brain API running at http://${config.host}:${config.port}`);
-    console.log(`   Health check: http://localhost:${config.port}/health`);
-    console.log(`   API docs: http://localhost:${config.port}/\n`);
+    logger.info('OADS Brain API running', {
+      url: `http://${config.host}:${config.port}`,
+      health: `http://localhost:${config.port}/health`
+    });
 
   } catch (err) {
-    app.log.error(err);
+    logger.error('Failed to start server', { error: err });
     process.exit(1);
   }
 
@@ -67,15 +70,15 @@ async function main(): Promise<void> {
   const signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM'];
   for (const signal of signals) {
     process.on(signal, async () => {
-      console.log(`\nReceived ${signal}, shutting down gracefully...`);
+      logger.info('Shutting down gracefully', { signal });
 
       try {
         await app.close();
         closeDb();
-        console.log('Server closed successfully');
+        logger.info('Server closed successfully');
         process.exit(0);
       } catch (err) {
-        console.error('Error during shutdown:', err);
+        logger.error('Error during shutdown', { error: err });
         process.exit(1);
       }
     });
@@ -83,6 +86,6 @@ async function main(): Promise<void> {
 }
 
 main().catch(err => {
-  console.error('Fatal error:', err);
+  logger.error('Fatal error', { error: err });
   process.exit(1);
 });

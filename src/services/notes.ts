@@ -3,6 +3,7 @@ import { getDb } from '../db/client.js';
 import type { Note, CreateNoteInput, NoteListQuery, PaginatedResponse } from '../types/index.js';
 import { sanitizeContent, sanitizeProjectName, sanitizeTags } from '../security/sanitize.js';
 import { syncNoteToVault, deleteNoteFromVault } from './vault-sync.js';
+import logger from '../utils/logger.js';
 
 /**
  * Create a new note
@@ -31,7 +32,7 @@ export function createNote(input: CreateNoteInput): Note {
   try {
     syncNoteToVault(note);
   } catch (error) {
-    console.error('Failed to sync note to vault:', error);
+    logger.warn('Failed to sync note to vault', { noteId: id, error });
   }
 
   return note;
@@ -121,7 +122,7 @@ export function updateNote(id: string, updates: Partial<CreateNoteInput>): Note 
     try {
       syncNoteToVault(updated);
     } catch (error) {
-      console.error('Failed to sync note to vault:', error);
+      logger.warn('Failed to sync note to vault', { noteId: id, error });
     }
   }
 
@@ -147,7 +148,7 @@ export function deleteNote(id: string): boolean {
     try {
       deleteNoteFromVault(note);
     } catch (error) {
-      console.error('Failed to delete note from vault:', error);
+      logger.warn('Failed to delete note from vault', { noteId: id, error });
     }
   }
 
