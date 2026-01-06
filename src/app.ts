@@ -9,6 +9,7 @@ import { artifactsRoutes } from './routes/artifacts.js';
 import { contextRoutes } from './routes/context.js';
 import { tasksRoutes } from './routes/tasks.js';
 import { searchRoutes } from './routes/search.js';
+import { feedbackRoutes } from './routes/feedback.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -76,6 +77,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(contextRoutes);
   await app.register(tasksRoutes);
   await app.register(searchRoutes);
+  await app.register(feedbackRoutes);
 
   return app;
 }

@@ -25,7 +25,10 @@ export type AuditAction =
   | 'task.activate'
   | 'task.delete'
   | 'search.query'
-  | 'rate_limit.exceeded';
+  | 'rate_limit.exceeded'
+  | 'feedback.create'
+  | 'feedback.list'
+  | 'feedback.rate_limited';
 
 /**
  * Log an audit event
