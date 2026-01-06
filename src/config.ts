@@ -49,6 +49,9 @@ export const config = {
   rateLimitMax: getEnvInt('RATE_LIMIT_MAX', 100),
   rateLimitWindowMs: getEnvInt('RATE_LIMIT_WINDOW_MS', 60000),
 
+  // CORS - comma-separated list of allowed origins
+  corsOrigins: getEnv('CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173'),
+
   // App info
   version: '1.0.0',
 

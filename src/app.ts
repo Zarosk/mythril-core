@@ -32,9 +32,13 @@ export async function buildApp(): Promise<FastifyInstance> {
     contentSecurityPolicy: false // Allow API calls from anywhere
   });
 
-  // CORS
+  // CORS - use config-based origins in production
+  const corsOrigins = config.isDev()
+    ? true  // Allow all in development
+    : config.corsOrigins.split(',').map(o => o.trim()).filter(Boolean);
+
   await app.register(cors, {
-    origin: config.isDev() ? true : false, // In production, configure specific origins
+    origin: corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization'],
     credentials: true
