@@ -4,7 +4,10 @@ import { getDb } from '../db/client.js';
 import type { ApiKey } from '../types/index.js';
 
 const SALT_ROUNDS = 12;
-const KEY_PREFIX = 'oads_live_';
+
+// New keys use mythril_ prefix, but we accept both for backward compatibility
+const KEY_PREFIX = 'mythril_live_';
+const VALID_PREFIXES = ['mythril_live_', 'mythril_test_', 'oads_live_', 'oads_test_'];
 
 export interface GeneratedKey {
   id: string;
@@ -42,9 +45,10 @@ export async function generateApiKey(
 /**
  * Verify an API key and return the key record if valid
  * Returns the key record including revoked keys so the caller can check status
+ * Accepts both mythril_ and oads_ prefixes for backward compatibility
  */
 export async function verifyApiKey(rawKey: string): Promise<ApiKey | null> {
-  if (!rawKey || !rawKey.startsWith(KEY_PREFIX)) {
+  if (!rawKey || !VALID_PREFIXES.some(prefix => rawKey.startsWith(prefix))) {
     return null;
   }
 

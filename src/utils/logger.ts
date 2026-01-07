@@ -11,8 +11,10 @@ const logDir = path.join(process.cwd(), 'logs');
  */
 const SECRET_PATTERNS = [
   /sk-ant-[a-zA-Z0-9-_]+/g,        // Anthropic API keys
-  /oads_live_[a-zA-Z0-9-_]+/g,     // OADS live API keys
-  /oads_test_[a-zA-Z0-9-_]+/g,     // OADS test API keys
+  /mythril_live_[a-zA-Z0-9-_]+/g,  // Mythril live API keys
+  /mythril_test_[a-zA-Z0-9-_]+/g,  // Mythril test API keys
+  /oads_live_[a-zA-Z0-9-_]+/g,     // Legacy OADS live API keys
+  /oads_test_[a-zA-Z0-9-_]+/g,     // Legacy OADS test API keys
   /Bearer\s+[a-zA-Z0-9-_.]+/gi,    // Bearer tokens
   /api[_-]?key[=:]\s*["']?[a-zA-Z0-9-_]+["']?/gi, // Generic API keys
   /password[=:]\s*["']?[^"'\s]+["']?/gi,  // Passwords
