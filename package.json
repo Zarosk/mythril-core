@@ -1,7 +1,7 @@
 {
-  "name": "oads-brain",
+  "name": "mythril-core",
   "version": "1.0.0",
-  "description": "HTTP API server for cross-platform note/idea capture - OADS Brain",
+  "description": "Mythril Core - Brain API server for cross-platform note/idea capture",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -16,13 +16,13 @@
     "generate-key": "tsx src/scripts/generate-key.ts"
   },
   "keywords": [
-    "oads",
+    "mythril",
     "brain",
     "api",
     "notes",
     "obsidian"
   ],
-  "author": "OADS",
+  "author": "Mythril",
   "license": "MIT",
   "dependencies": {
     "@fastify/cors": "^9.0.1",

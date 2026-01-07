@@ -47,7 +47,7 @@ export async function healthRoutes(app: FastifyInstance): Promise<void> {
    */
   app.get('/', async (_request, reply) => {
     return reply.send({
-      name: 'OADS Brain API',
+      name: 'Mythril Core API',
       version: config.version,
       docs: '/health'
     });

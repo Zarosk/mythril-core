@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function main(): Promise<void> {
-  logger.info('Starting OADS Brain API Server');
+  logger.info('Starting Mythril Core API Server');
   logger.info('Environment', { env: config.nodeEnv });
 
   // Initialize database
@@ -56,7 +56,7 @@ async function main(): Promise<void> {
       host: config.host
     });
 
-    logger.info('OADS Brain API running', {
+    logger.info('Mythril Core API running', {
       url: `http://${config.host}:${config.port}`,
       health: `http://localhost:${config.port}/health`
     });

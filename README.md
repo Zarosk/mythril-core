@@ -1,6 +1,6 @@
-# OADS Brain API
+# Mythril Core API
 
-HTTP API server for cross-platform note/idea capture. This is the bridge that lets iPhone, web browser, and Discord push content into the OADS system.
+HTTP API server for cross-platform note/idea capture. This is the bridge that lets iPhone, web browser, and Discord push content into the Mythril system.
 
 ## Architecture
 

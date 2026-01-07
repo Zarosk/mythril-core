@@ -47,7 +47,7 @@ describe('Health Routes', () => {
       expect(response.statusCode).toBe(200);
 
       const body = JSON.parse(response.body);
-      expect(body.name).toBe('OADS Brain API');
+      expect(body.name).toBe('Mythril Core API');
       expect(body.version).toBeDefined();
     });
   });
