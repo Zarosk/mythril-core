@@ -88,7 +88,7 @@ const logger = winston.createLogger({
     winston.format.errors({ stack: true }),
     winston.format.json()
   ),
-  defaultMeta: { service: 'oads-brain' },
+  defaultMeta: { service: 'mythril-core' },
   transports: [
     // Console (colored, simple for dev)
     new winston.transports.Console({
