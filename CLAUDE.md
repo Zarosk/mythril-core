@@ -1,8 +1,8 @@
-# OADS Brain API - Claude Context
+# Mythril Core API - Claude Context
 
 ## What is this?
 
-This is the **OADS Brain API** - an HTTP API server that serves as the central hub for capturing and organizing notes, artifacts, and tasks across multiple platforms (iPhone, Discord, web browser). It syncs data to an Obsidian vault for persistence and accessibility.
+This is the **Mythril Core API** - an HTTP API server that serves as the central hub for capturing and organizing notes, artifacts, and tasks across multiple platforms (iPhone, Discord, web browser). It syncs data to an Obsidian vault for persistence and accessibility.
 
 ## Tech Stack
 
@@ -119,6 +119,6 @@ Tests use in-memory SQLite (`:memory:`) so no cleanup needed.
 
 2. **API keys are shown only once** - On generation, the raw key is displayed. After that, only the hash is stored.
 
-3. **Task IDs are formatted** - Tasks use `PROJECT-NNN` format (e.g., `OADS-001`), not random IDs like other entities.
+3. **Task IDs are formatted** - Tasks use `PROJECT-NNN` format (e.g., `MYTHRIL-001`), not random IDs like other entities.
 
 4. **Tags are stored as JSON** - In the database, tags are a JSON string. Parse with `JSON.parse()`.
